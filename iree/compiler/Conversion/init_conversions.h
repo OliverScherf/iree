@@ -23,6 +23,7 @@
 #include "iree/compiler/Conversion/LinalgToLLVM/Passes.h"
 #include "iree/compiler/Conversion/LinalgToSPIRV/Passes.h"
 #include "iree/compiler/Conversion/LinalgToVector/Passes.h"
+#include "iree/compiler/Conversion/VectorToLLVM/Passes.h"
 
 namespace mlir {
 namespace iree_compiler {
@@ -85,6 +86,14 @@ inline void registerLinalgToLLVMPasses() {
     createLinalgTileAndVectorizeWorkgroupsPass();
     createMaterializeCPULaunchConfigurationPass();
     createUnfusedFMAOpsPass();
+    return true;
+  }();
+  (void)init_once;
+}
+
+inline void registerVectorToLLVMPasses() {
+  static bool init_once = []() {
+    createVectorToAArch64InlineAssemblyPass();
     return true;
   }();
   (void)init_once;
